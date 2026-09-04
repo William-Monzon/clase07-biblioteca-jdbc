@@ -6,6 +6,7 @@ import edu.umg.programacion2.clase07.biblioteca.modelo.Libro;
 import edu.umg.programacion2.clase07.biblioteca.modelo.PrestamoDetalle;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -55,8 +56,21 @@ public class ReporteService {
      */
     public Set<Libro> librosNuncaPrestados() throws SQLException {
         Set<Libro> resultado = new HashSet<>();
-        // TODO: usar libroDAO y prestamoDAO para llenar "resultado" segun las pistas de arriba.
-
+        
+        List<Libro> libros = libroDAO.listarTodos();
+        
+        List<PrestamoDetalle> prestamos = prestamoDAO.listarPrestamosActivosConLibro();
+        
+        Set<String> tituloPrestado = new HashSet<String>();
+        for(PrestamoDetalle prestamo: prestamos) {
+        	tituloPrestado.add(prestamo.getTituloLibro());
+        }
+        
+        for(Libro libro: libros) {
+        	if (!tituloPrestado.contains(libro.getTitulo())) {
+                resultado.add(libro);
+            }
+        }
         return resultado;
     }
 
