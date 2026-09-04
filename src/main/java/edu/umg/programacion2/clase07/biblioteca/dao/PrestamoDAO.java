@@ -117,7 +117,24 @@ public class PrestamoDAO {
 
         return resultado;
     }
+
+
+// EJERCICIO PROPUESTO (para la casa):
+    public int contarPrestamosPorLibro(int libroId) throws SQLException {
+    	String sql = "SELECT COUNT(*) FROM prestamos WHERE libro_id = ?";
+
+    	try (Connection conexion = DriverManager.getConnection(URL, USUARIO, PASSWORD);
+    			PreparedStatement statement = conexion.prepareStatement(sql)) {
+
+    		statement.setInt(1, libroId);
+
+    		try (ResultSet resultado = statement.executeQuery()) {
+         	  if (resultado.next()) {
+         		  return resultado.getInt(1);
+         		  
+         	  }
+         	  	return 0;
+    		}
+    	}
+    }
 }
-
-
-
