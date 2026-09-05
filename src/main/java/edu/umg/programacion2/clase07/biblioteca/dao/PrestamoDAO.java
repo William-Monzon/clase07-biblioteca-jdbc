@@ -98,6 +98,7 @@ public class PrestamoDAO {
     public List<PrestamoDetalle> listarPrestamosActivosConLibro() throws SQLException {
         List<PrestamoDetalle> resultado = new ArrayList<>();
         String sql = "SELECT p.nombre_estudiante, p.fecha_prestamo, l.titulo "
+
         		+ "FROM prestamos p "
         		+ "JOIN libros l ON p.libro_id = l.id "
         		+ "WHERE p.fecha_devolucion IS NULL "
@@ -113,11 +114,32 @@ public class PrestamoDAO {
               }
         return resultado;
     }
-    
+
     private PrestamoDetalle mapearFila(ResultSet resultado) throws SQLException {
         String tituloLibro = resultado.getString("titulo");
         String nombreEstudiante = resultado.getString("nombre_estudiante");
         LocalDate fechaPrestamo = LocalDate.parse(resultado.getString("fecha_prestamo"));;
         return new PrestamoDetalle(tituloLibro, nombreEstudiante, fechaPrestamo);
+    }
+
+
+// EJERCICIO PROPUESTO (para la casa):
+    public int contarPrestamosPorLibro(int libroId) throws SQLException {
+    	String sql = "SELECT COUNT(*) FROM prestamos WHERE libro_id = ?";
+
+    	try (Connection conexion = DriverManager.getConnection(URL, USUARIO, PASSWORD);
+    			PreparedStatement statement = conexion.prepareStatement(sql)) {
+
+    		statement.setInt(1, libroId);
+
+    		try (ResultSet resultado = statement.executeQuery()) {
+         	  if (resultado.next()) {
+         		  return resultado.getInt(1);
+         		  
+         	  }
+         	  	return 0;
+    		}
+    	}
+
     }
 }
