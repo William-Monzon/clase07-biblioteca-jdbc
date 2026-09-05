@@ -47,3 +47,10 @@ FROM prestamos p
 JOIN libros l ON p.libro_id = l.id
 WHERE p.fecha_devolucion IS NULL
 ORDER BY p.fecha_prestamo;
+
+-- Ejemplo para probar PrestamoDAO.contarPrestamosPorLibro():
+-- cambia el 3 por el id del libro que quieras consultar.
+-- Con los datos de ejemplo, el libro 3 (Clean Code) tiene 2 prestamos en total.
+SELECT COUNT(*) AS total_prestamos
+FROM prestamos
+WHERE libro_id = 3;
